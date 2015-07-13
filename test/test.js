@@ -12,6 +12,9 @@ describe('npm-taken', function() {
   var httpAlternate = nock(HTTP_URL);
 
   before(function() {
+    if (!nock.isActive()) {
+      nock.activate();
+    }
     mainRegistry = nock('https://registry.npmjs.com');
   });
 

@@ -17,6 +17,7 @@
     "cover": "istanbul cover ./node_modules/.bin/_mocha",
     "lint": "jshint *.js lib/*.js lib/**/*.js test/*.js test/**/*.js",
     "debug": "mocha",
+    "watch": "mocha -w",
     "style": "jscs ./**/*.js && jscs ./test/** --config=./test/.jscsrc"
   },
   "files": [
