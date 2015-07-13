@@ -7,9 +7,24 @@ describe('npm-taken', function() {
   var HTTPS_URL = 'https://registry.alternate.com';
   var HTTP_URL = 'http://registry.http-alternate.com';
 
-  var mainRegistry = nock('https://registry.npmjs.com');
+  var mainRegistry;
   var httpsAlternate = nock(HTTPS_URL);
   var httpAlternate = nock(HTTP_URL);
+
+  before(function() {
+    mainRegistry = nock('https://registry.npmjs.com');
+  });
+
+  afterEach(function() {
+    mainRegistry.done();
+    httpsAlternate.done();
+    httpAlternate.done();
+  });
+
+  after(function() {
+    nock.cleanAll();
+    nock.restore();
+  });
 
   it('returns descriptor if module name is taken', function(done) {
     mainRegistry.get('/taken').reply(200, {description:'this module is taken'});
@@ -87,6 +102,48 @@ describe('npm-taken', function() {
     npmTaken('bad-json', function(err, res) {
       assert(err);
       assert(err instanceof SyntaxError);
+      done();
+    });
+  });
+
+  it('handles scoped packages', function(done) {
+    mainRegistry.get('/@scope-name%2fpackage-name').reply(200, {description:'this is a scoped package'});
+
+    npmTaken('@scope-name/package-name', function(err, taken) {
+      assert.ifError(err);
+      assert(taken);
+      assert.equal(taken.description, 'this is a scoped package');
+      done();
+    });
+  });
+});
+
+describe('some real world tests', function() {
+  this.timeout(15000);
+
+  it('"which" is an existing npm package', function(done) {
+    npmTaken('which', function(err, taken) {
+      assert.ifError(err);
+      assert(taken);
+      done();
+    });
+  });
+
+  it('"@james.talmage/npm-safe-name" is an existing scoped npm package', function(done) {
+    npmTaken('@james.talmage/npm-safe-name', function(err, taken) {
+      assert.ifError(err);
+      assert(taken);
+      done();
+    });
+  });
+
+  it('non-existing test name', function(done) {
+    var name = 'npm-taken-some-non-existent-name-plus-random-' +
+                Math.floor(Math.random() * 100000000);
+
+    npmTaken(name, function(err, taken) {
+      assert.ifError(err);
+      assert.strictEqual(taken, false);
       done();
     });
   });
