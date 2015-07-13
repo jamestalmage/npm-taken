@@ -1,6 +1,6 @@
 # npm-taken 
 
-Find out if the module name you want is already taken on npm.
+Find out if a module name is already in the npm registry.
 
 [![Build Status](https://travis-ci.org/jamestalmage/npm-taken.svg?branch=master)](https://travis-ci.org/jamestalmage/npm-taken)
 [![Coverage Status](https://coveralls.io/repos/jamestalmage/npm-taken/badge.svg?branch=master&service=github)](https://coveralls.io/github/jamestalmage/npm-taken?branch=master)
