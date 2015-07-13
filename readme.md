@@ -45,7 +45,7 @@ The package name you want.
 *Optional*  
 Type: `string`
 
-An alternate registry where perform the lookup.
+Use an alternate registry to perform the lookup.
 Default is `https://registry.npmjs.com/`.
 
 #### callback
@@ -53,7 +53,7 @@ Default is `https://registry.npmjs.com/`.
 *Optional*  
 Type: `function(err, response)`
 
-Your callback that will be called with:
+Will be called with:
 
 - `err`: if there was some problem communicating with the registry, `null` otherwise.
 - `response`: will be `false` if the name is available, otherwise it will be an object containing metadata about the existing module.
